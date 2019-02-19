@@ -1,0 +1,37 @@
+{
+  "name": "object-from-object",
+  "version": "0.1.0",
+  "description": "Module for building a new object from a template with values from another object",
+  "main": "lib/index.js",
+  "directories": {
+    "lib": "lib"
+  },
+  "file": ["lib/**/*"],
+  "scripts": {
+    "test": "NONE YET",
+    "build": "tsc"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/nitmws/object-from-object.git"
+  },
+  "keywords": [
+    "objects",
+    "transforming",
+    "mapping",
+    "typescript"
+  ],
+  "author": {
+    "name": "Michael W. Steidl/NewsIT",
+    "url": "https://www.linkedin.com/in/michaelwsteidl"
+  },
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/nitmws/object-from-object/issues"
+  },
+  "homepage": "https://github.com/nitmws/object-from-object#readme",
+  "devDependencies": {
+    "@types/node": "^11.9.4",
+    "tslint": "^5.12.1"
+  }
+}
