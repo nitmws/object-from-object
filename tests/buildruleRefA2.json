@@ -1,0 +1,42 @@
+{
+  "tPlain1": "aPlain",
+  "tPlain2": "bObj",
+  "ofo$COMMENT_tPlain2": "tPlain2 does not deliver object - actually it should ",
+  "tPlain3": "bObj.bObj3.bObj3a",
+  "tPlain4a": "cArrPlain[1]",
+  "tPlain4b": "cArrPlain[99]",
+  "tPlain5": "dArrPlain[3]",
+  "tPlain6": "eArrObj[1].eArrObj3.eArrObj3a",
+  "tObj1": {
+    "tObj1a": "bObj.bObj1",
+    "tObj1b": "bObj.bObj2",
+    "tObj1c": {
+      "tObj1cA": "bObj.bObj3.bObj3a",
+      "tObj1cB": "bObj.bObj3.bObj3b[1]"
+    }
+  },
+  "tArr1": [ "cArrPlain"],
+  "tArr2": [ "bObj.bObj3.bObj3b" ],
+  "tArr3": [
+    {
+      "tArr3a": "bObj.bObj1",
+      "tArr3b": "bObj.bObj2"
+    }
+  ],
+  "tArr4": [
+    {
+      "tArr4a": "eArrObj[a].eArrObj1",
+      "tArr4b": "eArrObj[a].eArrObj2",
+      "tArr4c": {
+        "tArr4c1": "eArrObj[a].eArrObj3.eArrObj3a",
+        "tArr4c2": [ "eArrObj[a].eArrObj3.eArrObj3b" ]
+      }
+    }
+  ],
+  "tArr5": [
+    {
+      "tArr5a": "eArrObj[1].eArrObj3.eArrObj3c[a].eArrObj3c1",
+      "tArr5b": "eArrObj[1].eArrObj3.eArrObj3c[a].eArrObj3c2"
+    }
+  ]
+}

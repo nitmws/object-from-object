@@ -3,12 +3,16 @@
   "version": "0.1.0",
   "description": "Module for building a new object from a template with values from another object",
   "main": "lib/index.js",
+  "types": "lib/index.d.ts",
   "directories": {
     "lib": "lib"
   },
-  "file": ["lib/**/*"],
+  "files": [
+    "lib/**/*"
+  ],
   "scripts": {
-    "test": "NONE YET",
+    "test": "mocha -r ts-node/register tests/**/*.test.ts",
+    "testWithCoverage": "nyc -r lcov -e .ts -x \\\"*.test.ts\\\" mocha -r ts-node/register tests/**/*.test.ts && nyc report",
     "build": "tsc"
   },
   "repository": {
@@ -31,7 +35,14 @@
   },
   "homepage": "https://github.com/nitmws/object-from-object#readme",
   "devDependencies": {
+    "@types/chai": "^4.1.7",
+    "@types/mocha": "^5.2.6",
     "@types/node": "^11.9.4",
-    "tslint": "^5.12.1"
+    "chai": "^4.2.0",
+    "mocha": "^6.0.0",
+    "nyc": "^13.3.0",
+    "ts-node": "^8.0.2",
+    "tslint": "^5.12.1",
+    "typescript": "^3.3.3"
   }
 }
