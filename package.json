@@ -11,8 +11,8 @@
     "lib/**/*"
   ],
   "scripts": {
-    "test": "mocha -r ts-node/register tests/**/*.test.ts",
-    "testWithCoverage": "nyc -r lcov -e .ts -x \\\"*.test.ts\\\" mocha -r ts-node/register tests/**/*.test.ts && nyc report",
+    "test": "mocha -r ts-node/register test/**/*.test.ts",
+    "testWithCoverage": "nyc -r lcov -e .ts -x \\\"*.test.ts\\\" mocha -r ts-node/register test/**/*.test.ts && nyc report",
     "build": "tsc"
   },
   "repository": {
