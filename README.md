@@ -81,8 +81,8 @@ This string defines the rule for retrieving a value from the Source Object:
    * Comments may be added by starting the property name with "ofo$COMMENT". In this case the property will be ignored while building the new object. (As JSON rules prohibit to use the same property name multiple times you should append a sequence to this basic name on your own.)
  * The property names - value transformation rules separator: `$#$` - must be used if a sequence of property names and a rule for transforming the value is defined.
  * Value transformation rule: a name of a transformation rule taken from this enumeration
-   * ToStr = converts a numeric value to a string
-   * ToNum = converts a string value to a number - if the format of the string complies.
+   * ToStr = converts a numeric value to a string (for plain values only)
+   * ToNum = converts a string value to a number - if the format of the string complies to the Javascript function parseInt - (for plain values only)
 * Implicit value rule: if the string of the value of a property starts with VALSTR= the substring to its right becomes the value in the Target Object. If it starts with VALNUM= the string to its right will be transformed to a numeric value and applied to the property in the To-Be-Build Object.
 
 Example:

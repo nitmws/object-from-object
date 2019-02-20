@@ -34,6 +34,5 @@ export declare class ObjectFromObject {
      * Returns one of the BruleValTypes.
      * @param brvalue
      */
-    private getBruleValType;
-    tEST01(): void;
+    private static getBruleValType;
 }

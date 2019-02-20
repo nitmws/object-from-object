@@ -94,8 +94,8 @@ export class ObjectFromObject {
             return srcPropValueObj;
         }
         if (bruleValueParts.srcpropname.indexOf("VALNUM=") === 0 && bruleValueParts.srcpropname.length > 6 ) {
-            const valstr = bruleValueParts.srcpropname.substr(7);
-            const valnum = Number.parseInt(valstr);
+            const valstr: string = bruleValueParts.srcpropname.substr(7);
+            const valnum: number = Number.parseInt(valstr, 10);
             if (Number.isNaN(valnum)) {
                 srcPropValueObj.propfound = false;
                 return srcPropValueObj;
@@ -106,6 +106,24 @@ export class ObjectFromObject {
         srcPropValueObj = this.getSourcePlainValue(bruleValueParts.srcpropname, usedArrIdxs);
         if (bruleValueParts.valueProcRule !== "") {
             // modify the value from the source by the rule
+            const valueProcRule = bruleValueParts.valueProcRule.toUpperCase();
+            switch (valueProcRule) {
+                case "TOSTR":
+                    if (srcPropValueObj.asstring === "") {
+                        srcPropValueObj.asstring = srcPropValueObj.asnumber.toString(10);
+                        srcPropValueObj.asnumber = invalidNumber;
+                    }
+                    break;
+                case "TONUM":
+                    if ((srcPropValueObj.asnumber === invalidNumber) && (srcPropValueObj.asstring !== "")) {
+                        const valnumber: number = Number.parseInt(srcPropValueObj.asstring, 10);
+                        if (Number.isNaN(valnumber)) {
+                            srcPropValueObj.asnumber = valnumber;
+                            srcPropValueObj.asstring = "";
+                        }
+                    }
+                    break;
+            }
         }
         if (srcPropValueObj.asarray.length > 0) {
             srcPropValueObj.asarray = [];
@@ -120,7 +138,7 @@ export class ObjectFromObject {
                 continue;
             }
             const brulePropval: any = bruleObject[brulePropname];
-            const brulePropvalType: BruleValType = this.getBruleValType(brulePropval);
+            const brulePropvalType: BruleValType = ObjectFromObject.getBruleValType(brulePropval);
             switch (brulePropvalType) {
                 case BruleValType.String:
                     const builtSpValue: IPlainValueOptArray = this.buildSinglePlainValue(brulePropval, usedArrIdxs);
@@ -153,7 +171,7 @@ export class ObjectFromObject {
             return builtArray;
         }
         const bruleArrayPropval: any = bruleArrayObject[0];
-        const brulePropvalType: BruleValType = this.getBruleValType(bruleArrayPropval);
+        const brulePropvalType: BruleValType = ObjectFromObject.getBruleValType(bruleArrayPropval);
         switch (brulePropvalType) {
             case BruleValType.String:
                 // @ts-ignore
@@ -227,7 +245,7 @@ export class ObjectFromObject {
     private getSourcePlainValue(bruleSourcePropName: string, usedArrIdx: number[]): IPlainValueOptArray  {
         const retobj: IPlainValueOptArray = { asstring: "", asnumber: invalidNumber, asarray: [], propfound: true };
         const propnames: string[] = bruleSourcePropName.split(".");
-        const sopidxs: any[] = new Array(); // = source object property value for an index
+        const sopidxs: any[] = []; // = source object property value for an index
         propnames.forEach( (propname: string) => {
             const sqbracketstart = propname.indexOf("[");
             if (sqbracketstart > -1) {
@@ -235,7 +253,7 @@ export class ObjectFromObject {
                 sopidxs.push(truepropname);
                 const sqbracketend = propname.indexOf("]");
                 const idxval1: any = propname.substring(sqbracketstart + 1, sqbracketend);
-                const idxval1num = Number.parseInt(idxval1);
+                const idxval1num = Number.parseInt(idxval1, 10);
                 if (Number.isNaN(idxval1num)) {
                     // it is Not a Number - a string?
                     if (typeof idxval1 === "string") {
@@ -362,7 +380,7 @@ export class ObjectFromObject {
      * Returns one of the BruleValTypes.
      * @param brvalue
      */
-    private getBruleValType(brvalue: object): BruleValType {
+    private static getBruleValType(brvalue: object): BruleValType {
         let rettype: BruleValType = BruleValType.Undefined;
         if (Array.isArray(brvalue)) {
             rettype = BruleValType.Array;
@@ -379,11 +397,11 @@ export class ObjectFromObject {
     /*
     ***** TEST methods during development
      */
+/*
     public tEST01() {
         let testUsedArrIdx = [1, 2, 3];
         let fullpropname: string = "";
         let testValue: object = {};
-        /*
         fullpropname = "sh1plainSingle";
         testValue = this.getSourcePlainValue(fullpropname, testUsedArrIdx);
         console.log("Result of getSourceValue Test 1")
@@ -404,12 +422,12 @@ export class ObjectFromObject {
         testValue = this.getSourcePlainValue(fullpropname, testUsedArrIdx);
         console.log("Result of getSourceValue Test 5")
         console.log(testValue);
-*/
         fullpropname = "sh1plainArray";
         testValue = this.getSourcePlainValue(fullpropname, testUsedArrIdx);
         console.log("Result of getSourceValue Test 6");
         console.log(testValue);
     }
+*/
 }
 
 /*
