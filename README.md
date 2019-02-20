@@ -133,8 +133,8 @@ Example:
 
 See these files in the /test folder as examples:
 
-* buildruleRefA2.json: a Building Rules object
-* sourceRef02.json: a Source Object
+* buildruleRef... .json: a Building Rules object like the one above
+* sourceRef... .json: a Source Object
 
 ## API
 
@@ -205,7 +205,7 @@ The Target Object
 
 Type: `Function`
 
-Builds the Target Object based on the Building Rules object and retrieving the data from the Source Object.
+Builds the Target Object based on the Building Rules object and by retrieving the data from the Source Object.
 
 To work properly it is required to load first the Building Rules object and the Source object.
 
