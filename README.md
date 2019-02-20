@@ -74,11 +74,59 @@ This string defines the rule for retrieving a value from the Source Object:
    * prop6[2].prop6c = a property from the third item in the array of objects being the value of prop6
    * prop8[a] = the structure of the Buildung Rules object defines an array and the Source Object has an array of values for prop8. In this case the items of the array of prop8 are copied to the items of the property in the To-Be-Built Object in the same sequence - as long as items are available in the Source Object.
    * The count of this sequence is limited to 10 items. Each property name is an item and each index of an array is an item. Example: prop9.prop9a.prop9a1[a].prop9a1a makes an item count of 5.
+   * Comments may be added by starting the property name with "ofo$COMMENT". In this case the property will be ignored while building the new object. (As JSON rules prohibit to use the same property name multiple times you should append a sequence to this basic name on your own.)
  * The property names - value transformation rules separator: `$#$` - must be used if a sequence of property names and a rule for transforming the value is defined.
  * Value transformation rule: a name of a transformation rule taken from this enumeration
    * ToStr = converts a numeric value to a string
    * ToNum = converts a string value to a number - if the format of the string complies.
- 
+* Implicit value rule: if the string of the value of a property starts with VALSTR= the substring to its right becomes the value in the To-Be-Built Object. If it starts with VALNUM= the string to its right will be transformed to a numeric value and applied to the property in the To-Be-Build Object.
+
+Example:
+```
+{
+  "tPlain0": "VALSTR=this is a preset value",
+  "tPlain1": "aPlain",
+  "tPlain2": "bObj",
+  "tPlain3": "bObj.bObj3.bObj3a",
+  "tPlain4a": "cArrPlain[1]",
+  "tPlain4b": "cArrPlain[99]",
+  "tPlain5": "dArrPlain[3]",
+  "tPlain6": "eArrObj[1].eArrObj3.eArrObj3a",
+  "tObj1": {
+    "tObj1a": "bObj.bObj1",
+    "tObj1b": "bObj.bObj2",
+    "tObj1c": {
+      "tObj1cA": "bObj.bObj3.bObj3a",
+      "tObj1cB": "bObj.bObj3.bObj3b[1]"
+    }
+  },
+  "tArr1": [ "cArrPlain"],
+  "tArr2": [ "bObj.bObj3.bObj3b" ],
+  "tArr3": [
+    {
+      "tArr3a": "bObj.bObj1",
+      "tArr3b": "bObj.bObj2"
+    }
+  ],
+  "tArr4": [
+    {
+      "tArr4a": "eArrObj[a].eArrObj1",
+      "tArr4b": "eArrObj[a].eArrObj2",
+      "tArr4c": {
+        "tArr4c1": "eArrObj[a].eArrObj3.eArrObj3a",
+        "tArr4c2": [ "eArrObj[a].eArrObj3.eArrObj3b" ]
+      }
+    }
+  ],
+  "tArr5": [
+    {
+      "tArr5a": "eArrObj[1].eArrObj3.eArrObj3c[a].eArrObj3c1",
+      "tArr5b": "eArrObj[1].eArrObj3.eArrObj3c[a].eArrObj3c2"
+    }
+  ]
+}
+```
+
 
 ## API
 
