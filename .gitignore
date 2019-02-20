@@ -64,3 +64,5 @@ typings/
 .next
 
 # project directories
+lib/src
+lib/test
