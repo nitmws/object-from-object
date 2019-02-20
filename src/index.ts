@@ -28,7 +28,8 @@ export class ObjectFromObject {
         this._tgtobj = {};
     }
 
-    public loadBrules(json: string, jsonfilepath: string ) {
+    public loadBrules(json: string, jsonfilepath: string ): boolean {
+        let retValue: boolean = true;
         let jsonstring: string = "";
         if (json === "") {
             try {
@@ -46,9 +47,14 @@ export class ObjectFromObject {
                 this._brules = {};
             }
         }
+        if (this._brules === {}) {
+            retValue = false;
+        }
+        return retValue;
     }
 
-    public loadSourceObject( json: string, jsonfilepath: string ) {
+    public loadSourceObject( json: string, jsonfilepath: string ): boolean {
+        let retValue: boolean = true;
         let jsonstring: string = "";
         if (json === "") {
             try {
@@ -66,6 +72,10 @@ export class ObjectFromObject {
                 this._srcobj = {};
             }
         }
+        if (this._srcobj === {}) {
+            retValue = false;
+        }
+        return retValue;
     }
 
     public getTargetObject(): object {

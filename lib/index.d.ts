@@ -19,8 +19,8 @@ export declare class ObjectFromObject {
     protected _brules: object;
     protected _tgtobj: object;
     constructor();
-    loadBrules(json: string, jsonfilepath: string): void;
-    loadSourceObject(json: string, jsonfilepath: string): void;
+    loadBrules(json: string, jsonfilepath: string): boolean;
+    loadSourceObject(json: string, jsonfilepath: string): boolean;
     getTargetObject(): object;
     buildTargetFromSourceByRules(): void;
     private buildSinglePlainValue;
