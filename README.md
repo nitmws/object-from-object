@@ -74,7 +74,7 @@ This string defines the rule for retrieving a value from the Source Object:
    * prop6[2].prop6c = a property from the third item in the array of objects being the value of prop6
    * prop8[a] = the structure of the Buildung Rules object defines an array and the Source Object has an array of values for prop8. In this case the items of the array of prop8 are copied to the items of the property in the To-Be-Built Object in the same sequence - as long as items are available in the Source Object.
    * The count of this sequence is limited to 10 items. Each property name is an item and each index of an array is an item. Example: prop9.prop9a.prop9a1[a].prop9a1a makes an item count of 5.
- * The property names - value transformation rules separator: ´$#$´ - must be used if a sequence of property names and a rule for transforming the value is defined.
+ * The property names - value transformation rules separator: `$#$` - must be used if a sequence of property names and a rule for transforming the value is defined.
  * Value transformation rule: a name of a transformation rule taken from this enumeration
    * ToStr = converts a numeric value to a string
    * ToNum = converts a string value to a number - if the format of the string complies.
