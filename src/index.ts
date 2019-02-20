@@ -47,7 +47,7 @@ export class ObjectFromObject {
                 this._brules = {};
             }
         }
-        if (this._brules === {}) {
+        if (Object.keys(this._brules).length === 0 && this._brules.constructor === Object) {
             retValue = false;
         }
         return retValue;
@@ -72,7 +72,7 @@ export class ObjectFromObject {
                 this._srcobj = {};
             }
         }
-        if (this._srcobj === {}) {
+        if (Object.keys(this._srcobj).length === 0 && this._srcobj.constructor === Object) {
             retValue = false;
         }
         return retValue;
