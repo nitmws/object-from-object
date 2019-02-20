@@ -6,7 +6,7 @@ import { expect } from "chai";
 function InitOfo(): object {
     const testofo = new Ofo();
     testofo.loadSourceObject("", "./test/sourceRef02.json");
-    testofo.loadRules("", "./test/buildruleRefA2.json");
+    testofo.loadBrules("", "./test/buildruleRefA2.json");
     testofo.buildTargetFromSourceByRules();
     const builtobject: object = testofo.getTargetObject();
     return builtobject;

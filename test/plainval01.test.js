@@ -5,7 +5,7 @@ var assert = require("assert");
 function InitOfo() {
     var testofo = new index_1.ObjectFromObject();
     testofo.loadSourceObject("", "./tests/sourceRef02.json");
-    testofo.loadRules("", "./tests/buildruleRefA2.json");
+    testofo.loadBrules("", "./tests/buildruleRefA2.json");
     testofo.buildTargetFromSourceByRules();
     var builtobject = testofo.getTargetObject();
     return builtobject;

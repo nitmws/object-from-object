@@ -19,7 +19,7 @@ export declare class ObjectFromObject {
     protected _brules: object;
     protected _tgtobj: object;
     constructor();
-    loadRules(json: string, jsonfilepath: string): void;
+    loadBrules(json: string, jsonfilepath: string): void;
     loadSourceObject(json: string, jsonfilepath: string): void;
     getTargetObject(): object;
     buildTargetFromSourceByRules(): void;

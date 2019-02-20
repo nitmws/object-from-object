@@ -28,7 +28,7 @@ export class ObjectFromObject {
         this._tgtobj = {};
     }
 
-    public loadRules(json: string, jsonfilepath: string ) {
+    public loadBrules(json: string, jsonfilepath: string ) {
         let jsonstring: string = "";
         if (json === "") {
             try {
