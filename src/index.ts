@@ -117,9 +117,11 @@ export class ObjectFromObject {
                 case "TONUM":
                     if ((srcPropValueObj.asnumber === invalidNumber) && (srcPropValueObj.asstring !== "")) {
                         const valnumber: number = Number.parseInt(srcPropValueObj.asstring, 10);
-                        if (Number.isNaN(valnumber)) {
+                        if (!Number.isNaN(valnumber)) {
                             srcPropValueObj.asnumber = valnumber;
                             srcPropValueObj.asstring = "";
+                        } else {
+                            srcPropValueObj.asnumber = invalidNumber;
                         }
                     }
                     break;

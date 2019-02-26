@@ -1,6 +1,8 @@
 {
   "tPlain1": "aPlain",
   "tPlain2": "bObj",
+  "tPlainStr1": "aPlainNum$#$ToStr",
+  "tPlainNum1": "aPlainNumericStr$#$ToNum",
   "ofo$COMMENT_tPlain2": "tPlain2 does not deliver object - actually it should ",
   "tPlain3": "bObj.bObj3.bObj3a",
   "tPlain4a": "cArrPlain[1]",

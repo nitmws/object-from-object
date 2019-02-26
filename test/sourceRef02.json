@@ -1,5 +1,8 @@
 {
   "aPlain": "Value of aPlain",
+  "aPlainStr": "String value",
+  "aPlainNumericStr": "34",
+  "aPlainNum": 56,
   "bObj": {
     "bObj1": "Value of bObj.bObj1",
     "bObj2": 1234,
@@ -8,7 +11,7 @@
       "bObj3b": ["Val of bObj.bObj3.bObj3b[0]", "Val of bObj.bObj3.bObj3b[1]", "Val of bObj.bObj3.bObj3b[2]"]
     }
   },
-  "cArrPlain": ["Val of cArrPlain[0]", "Val cArrPlain[1]", "Val of cArrPlain[3]"],
+  "cArrPlain": ["Val of cArrPlain[0]", "Val cArrPlain[1]", "Val of cArrPlain[2]"],
   "dArrPlain": [1, 2, 3, 4 , 5],
   "eArrObj": [
     {
