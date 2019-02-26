@@ -18,6 +18,10 @@ function InitOfo(): object {
 /* TEST */
 describe("Object From Object Test 01", () => {
     const builtobject: any = InitOfo();
+    it("<tPlainPreset1> should return *this is a preset value*",
+        () => {
+            expect(builtobject.tPlainPreset1).to.equal("this is a preset value");
+        });
     it("<tPlain3> should return *Value of bObj.bObj3.bObj3a*",
         () => {
             expect(builtobject.tPlain3).to.equal("Value of bObj.bObj3.bObj3a");
@@ -49,5 +53,9 @@ describe("Object From Object Test 01", () => {
     it("<tArr4[1].tArr4c.tArr4c2[1]> should return *Val of eArrObj[1].eArrObj3.eArrObj3b[1]*",
         () => {
             expect(builtobject.tArr4[1].tArr4c.tArr4c2[1]).to.equal("Val of eArrObj[1].eArrObj3.eArrObj3b[1]");
+        });
+    it("Length of array <tArr6p> should be 0",
+        () => {
+            expect(builtobject.tArr6p.length).to.equal(0);
         });
 });

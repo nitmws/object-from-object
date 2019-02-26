@@ -1,4 +1,5 @@
 {
+  "tPlainPreset1": "VALSTR=this is a preset value",
   "tPlain1": "aPlain",
   "tPlain2": "bObj",
   "tPlainStr1": "aPlainNum$#$ToStr",
@@ -39,6 +40,26 @@
     {
       "tArr5a": "eArrObj[1].eArrObj3.eArrObj3c[a].eArrObj3c1",
       "tArr5b": "eArrObj[1].eArrObj3.eArrObj3c[a].eArrObj3c2"
+    }
+  ],
+  "tArr6p": [
+    "eArrObj[a].eArrObj2"
+  ],
+  "tArr6o": [
+    {
+      "tArr6p1": "eArrObj[a].eArrObj2"
+    }
+  ],
+  "tArr7": [
+    "eArrObj[0].eArrObj2"
+  ],
+  "tArr8": [
+    "fArrObj"
+  ],
+  "tPersons1": [
+    {
+      "name": "names1[a]",
+      "id": "ids1[a]"
     }
   ]
 }

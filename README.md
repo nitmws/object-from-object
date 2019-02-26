@@ -20,7 +20,7 @@ const builtobject: any = myofo.getTargetObject();
 
 ## Overview
 
-This module provides a framework for building a new object complying to building rules and ingesting data from a source object.
+This module provides a framework for building a new object complying to building rules and copying property values from a source object.
 
 * The object named Target Object is the result of the building process. 
 
@@ -34,7 +34,7 @@ The building rules for the Target Object are expressed by an object.
 
 #### The Structure
 
-The structure of the Building Rules object is a template for the Target Object. If a property of the Building Rules object can be filled with data from the Source Object this property is integrated into the Target Object.
+The structure of the Building Rules object is a template for the Target Object. If a property of the Building Rules object can be filled with data from the Source Object this property is integrated into the Target Object, else not.
  
 Example:
 
@@ -88,9 +88,12 @@ This string defines the rule for retrieving a value from the Source Object:
 Example:
 ```
 {
-  "tPlain0": "VALSTR=this is a preset value",
+  "tPlainPreset1": "VALSTR=this is a preset value",
   "tPlain1": "aPlain",
   "tPlain2": "bObj",
+  "tPlainStr1": "aPlainNum$#$ToStr",
+  "tPlainNum1": "aPlainNumericStr$#$ToNum",
+  "ofo$COMMENT_tPlain2": "tPlain2 does not deliver object - actually it should ",
   "tPlain3": "bObj.bObj3.bObj3a",
   "tPlain4a": "cArrPlain[1]",
   "tPlain4b": "cArrPlain[99]",
@@ -135,6 +138,47 @@ See these files in the /test folder as examples:
 
 * buildruleRef... .json: a Building Rules object like the one above
 * sourceRef... .json: a Source Object
+* builttarget... . json: a Target Object which was built while running tests
+
+#### Arrays
+
+Building arrays needs some special considerations as some rules apply.
+
+* The syntax rule for building an array is using square brackets and putting inside a Building Rule for the items inside the array. E.g. `"tArr1": [ "cArrPlain"]` to build an array of plain values or `"tArr2": [ { "tProp1": "sourceprop1[a].prop1a", "tProp1": "sourceprop1[a].prop1b",  }]` to build an array of objects.
+* The count of items in an array is limited by the count of available items in the Source Object:
+  * the Building Rule may address a property being an array of plain values or an array of objects. In this case all items from the Source Object are copied to the Target Object.
+  * a Building Rule may address individual source properties being a plain value for building the properties of an object inside an array in the Target Object. (In other words: the object in the Target Object is built property by property and not as a copy of a full object.) In this case the first object for the array in the Target Object is created and used as reference. An additional object for the array of the Target Object is created and added as long as the count of its properties is the same as in the reference object. In other words: if not all the defined properties of a target object can be filled by values from the Source Object adding new objects to the array stops. Example: the first object has 5 properties, the 4th object only 3 properties. In this case only the first three objects, [0], [1] and [2], are copied to the Target Object. 
+* What can be copied from the Source Object into an array in the Target Object depends also on the structure of the addressed property in the Source Object:
+  * If the addressed property is an array of plain values only an array of plain values can be built in the Target Object. 
+  * If the addressed property is an array of objects only an array objects with the same properties as in the Source Object can be built in the Target Object. 
+  * An array of objects with explicitly defined properties can be built in the Target Object. In this case each property in the Building Rules needs to address a property in the Source Object - preferable a property inside an object which resides inside an array or a property being an array of plain values. 
+  * If the addressed property is inside an object which is in an array an index variable can be used. E.g. the Source Object has this property   
+  
+```
+"eArrObj3c": [
+  {
+    "eArrObj3c1": "Val of eArrObj3c[0].eArrObj3c1",
+    "eArrObj3c2": "Val of eArrObj3c[0].eArrObj3c2"
+  },
+  {
+    "eArrObj3c1": "Val of eArrObj3c[1].eArrObj3c1",
+    "eArrObj3c2": "Val of eArrObj3c[1].eArrObj3c2"
+  },
+  {
+    "eArrObj3c1": "Val of eArrObj3c[2].eArrObj3c1",
+    "eArrObj3c2": "Val of eArrObj3c[2].eArrObj3c2"
+  }
+]
+```
+*
+  * ... in this case a Building Rule ` eArrObj3c[a].eArrObj3c1 ` can be used for a property of an object inside an array. Using this index variable results in applying the index of the to-be-built array to the array in the Source Object: the value of the target property `tArr2[0].tProp1` is copied from   ` eArrObj3c[0].eArrObj3c1 `, the value of `tArr2[1].tProp1` is copied from   ` eArrObj3c[1].eArrObj3c1 ` etc. 
+  * The index variable MUST be taken from the sequence 'a'..'z' in the hierarchical order of nested arrays of the Source Object. E.g. `eArrObj[a].eArrObj3.eArrObj3c[b].eArrObj3c1 ` indicates the properties eArrObj and eArrObj3c are an array of objects.
+
+Find examples for using arrays in the Building Rules and the Source Object in these files in the /test folder:
+
+* buildruleRef... .json: a Building Rules object like the one above
+* sourceRef... .json: a Source Object
+* builttarget... . json: a Target Object which was built while running tests
 
 ## API
 

@@ -88,5 +88,24 @@
         ]
       }
     }
-  ]
+  ],
+  "fArrObj": [
+    {
+      "fArrObj1": "Val of fArrObj[0].fArrObj1",
+      "fArrObj2": "Val of fArrObj[0].fArrObj1"
+    },
+    {
+      "fArrObj1": "Val of fArrObj[1].fArrObj1",
+      "fArrObj2": "Val of fArrObj[1].fArrObj1"
+    },
+    {
+      "fArrObj1": "Val of fArrObj[2].fArrObj1",
+      "fArrObj2": "Val of fArrObj[2].fArrObj1"
+    },
+    {
+      "fArrObj1": "Val of fArrObj[3].fArrObj1"
+    }
+  ],
+  "names1": ["Frank", "Mary", "John", "Marlene"],
+  "ids1": ["idFrank", "idMary", "idJohn", "idMarlene"]
 }
