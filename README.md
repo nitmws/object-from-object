@@ -3,8 +3,9 @@ Typescript/Javascript Node.js module for building a new object from a template w
 
 ## Usage
 
-``` 
-(Typescript)
+Typescript
+
+``` Typescript 
 import {ObjectFromObject as Ofo} from "object-from-object"
 
 const myofo = new Ofo();
@@ -19,8 +20,9 @@ const builtobject: any = myofo.getTargetObject();
 
 ```
 
-``` 
-(Javascript)
+Javascript
+
+``` Javascript
 const Ofo = require("object-from-object");
 
 const myofo = new Ofo();
