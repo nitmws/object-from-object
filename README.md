@@ -7,10 +7,10 @@ Typescript/Javascript Node.js module for building a new object from a template w
 import {ObjectFromObject as Ofo} from "object-from-object"
 
 const myofo = new Ofo();
-if (!testofo.loadSourceObject("", "./sourceRef02.json")) {
+if (!myofo.loadSourceObject("", "./source02.json")) {
     return;
 }
-if (!testofo.loadBrules("", "./buildruleRefA2.json")) {
+if (!myofo.loadBrules("", "./buildingrulesA.json")) {
     return;
 }
 myofo.buildTargetFromSourceByRules();
