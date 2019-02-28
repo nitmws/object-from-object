@@ -84,27 +84,38 @@ Rules for the structure of the Building Rules object:
 
 #### Rules for Retrieving Data from the Source
 
-The value of a property must be finally a plain string value. (This means: either a single plain value, or a plain value in an object being the value of a parenting property, or a plain value in an array of plain values.)
+##### Used terminology
+* plain string: a string, and nothing else
+* plain values in the Source Object: values of the JavaScript type string or number
 
-This string defines the rule for retrieving a value from the Source Object:
 
-`...hierarchy of property names in the Source Object..."$#$"...value transformation rule...`
+The value of a Building Rules property can be:
+* a plain string value, a rule for retrieving value(s) from the Source Object.
+* an object including one to many Building Rule properties
+* an array using a single Building Rule property or defining an array of objects. See more details about arrays below.
+
+
+The Building Rule string defines how to retrieve a value from the Source Object. Its formal structure is:
+
+`...property names in the Source Object..."$#$"...value transformation rule...`
+OR
+`VALxxx=...preset value...`
  
- * The property names: a sequence of property names as used in JavaScript.
-   * prop1 = a property at the top level of the Source Object
-   * prop1.prop1a = a property in an object being the value of prop1
-   * prop5[1] = the second item in the array of plain values of prop5
-   * prop6[2].prop6c = a property from the third item in the array of objects being the value of prop6
-   * prop8[a] = the structure of the Buildung Rules object defines an array and the Source Object has an array of values for prop8. In this case the items of the array of prop8 are copied to the items of the property in the Target Object in the same sequence - as long as items are available in the Source Object.
-   * The count of this sequence is limited to 10 items. Each property name is an item and each index of an array is an item. Example: prop9.prop9a.prop9a1[a].prop9a1a makes an item count of 5.
-   * Comments may be added by starting the property name with "ofo$COMMENT". In this case the property will be ignored while building the new object. (As JSON rules prohibit to use the same property name multiple times you should append a sequence to this basic name on your own.)
- * The property names - value transformation rules separator: `$#$` - must be used if a sequence of property names and a rule for transforming the value is defined.
- * Value transformation rule: a name of a transformation rule taken from this enumeration
-   * ToStr = converts a numeric value to a string (for plain values only)
-   * ToNum = converts a string value to a number - if the format of the string complies to the Javascript function parseInt - (for plain values only)
-* Implicit value rule: if the string of the value of a property starts with VALSTR= the substring to its right becomes the value in the Target Object. If it starts with VALNUM= the string to its right will be transformed to a numeric value and applied to the property in the To-Be-Build Object.
+ * **Property names**: a hierarchical sequence of property names as used in JavaScript. 
+   * Examples are:
+     * prop1 = a property at the hierarchical top level of the Source Object
+     * prop1.prop1a = a property in an object being the value of prop1
+     * prop5[1] = the second item in the array of values of prop5
+     * prop6[2].prop6c = a property from the third item in the array of objects being the value of prop6
+   * The count of this sequence is limited to 10 items. Each property name is an item and each index of an array is an item. Example: prop9.prop9a.prop9a1[2].prop9a1a makes an item count of 5.
+   * Comments may be added by starting the property name with "ofo$COMMENT". In this case the property will be ignored while building the new object. As JSON rules prohibit to use the same property name multiple times you should append variable string values to this basic name on your own.
+ * **The separator `$#$`**: must be used if a sequence of property names and a rule for transforming the value is defined.
+ * **Value transformation rule**: a name of a transformation rule taken from this enumeration
+   * **ToStr** = converts a numeric value to a string
+   * **ToNum** = converts a string value to a number - if the format of the string complies to the Javascript function parseInt
+* **Preset value rule**: if the string of the value of a property starts with VALSTR= the substring to its right becomes the string value in the Target Object. If it starts with VALNUM= the string to its right will be transformed to a numeric value becoming the numeric value in the Target Object.
 
-Example:
+Example of a Building Rules object:
 ```
 {
   "tPlainPreset1": "VALSTR=this is a preset value",
@@ -112,7 +123,6 @@ Example:
   "tPlain2": "bObj",
   "tPlainStr1": "aPlainNum$#$ToStr",
   "tPlainNum1": "aPlainNumericStr$#$ToNum",
-  "ofo$COMMENT_tPlain2": "tPlain2 does not deliver object - actually it should ",
   "tPlain3": "bObj.bObj3.bObj3a",
   "tPlain4a": "cArrPlain[1]",
   "tPlain4b": "cArrPlain[99]",
@@ -155,23 +165,22 @@ Example:
 
 See these files in the /test folder as examples:
 
-* buildruleRef... .json: a Building Rules object like the one above
+* buildingrulesRef... .json: a Building Rules object like the one above
 * sourceRef... .json: a Source Object
 * builttarget... . json: a Target Object which was built while running tests
 
 #### Arrays
 
-Building arrays needs some special considerations as some rules apply.
+Building arrays requires to follow some rules.
 
-* The syntax rule for building an array is using square brackets and putting inside a Building Rule for the items inside the array. E.g. `"tArr1": [ "cArrPlain"]` to build an array of plain values or `"tArr2": [ { "tProp1": "sourceprop1[a].prop1a", "tProp1": "sourceprop1[a].prop1b",  }]` to build an array of objects.
+* The Building Rule syntax for building an array is using square brackets and putting inside a Building Rule for the items inside the array.
+* The Building Rule may address a property with an array of plain values or objects the whole array - as it is - is copied from the Source to the Target Object.
+* The Building Rule of an array may have an object with a set of properties in the array. In this case an array of objects with these specified properties is built.
 * The count of items in an array is limited by the count of available items in the Source Object:
-  * the Building Rule may address a property being an array of plain values or an array of objects. In this case all items from the Source Object are copied to the Target Object.
-  * a Building Rule may address individual source properties being a plain value for building the properties of an object inside an array in the Target Object. (In other words: the object in the Target Object is built property by property and not as a copy of a full object.) In this case the first object for the array in the Target Object is created and used as reference. An additional object for the array of the Target Object is created and added as long as the count of its properties is the same as in the reference object. In other words: if not all the defined properties of a target object can be filled by values from the Source Object adding new objects to the array stops. Example: the first object has 5 properties, the 4th object only 3 properties. In this case only the first three objects, [0], [1] and [2], are copied to the Target Object. 
-* What can be copied from the Source Object into an array in the Target Object depends also on the structure of the addressed property in the Source Object:
-  * If the addressed property is an array of plain values only an array of plain values can be built in the Target Object. 
-  * If the addressed property is an array of objects only an array objects with the same properties as in the Source Object can be built in the Target Object. 
-  * An array of objects with explicitly defined properties can be built in the Target Object. In this case each property in the Building Rules needs to address a property in the Source Object - preferable a property inside an object which resides inside an array or a property being an array of plain values. 
-  * If the addressed property is inside an object which is in an array an index variable can be used. E.g. the Source Object has this property   
+  * the Building Rule may address a property being an array of plain values or an array of objects. In this case the same number of items are in the Target Object as in the Source Object.
+  * Building Rules of the properties in an object inside an array may address properties in the Source Object.In this case the first object for the array in the Target Object is created and its count of properties used as reference. An additional object for the array of the Target Object is created and added if the count of its properties is the same as the reference count. In other words: if not all the defined properties of a target object can be filled by values from the Source Object adding new objects to the array stops. 
+  * ... Example: the first object has 5 properties, the 4th object only 3 properties. In this case only the first three objects, [0], [1] and [2], are copied to the Target Object. 
+  * If the addressed property is in an object inside an array an index variable can be used. E.g. the Source Object has this property   
   
 ```
 "eArrObj3c": [

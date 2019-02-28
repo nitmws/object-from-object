@@ -5,11 +5,11 @@ import {ObjectFromObject as Ofo} from "../src/index";
 function InitOfo(): object {
     const testofo = new Ofo();
     testofo.loadSourceObject("", "./test/sourceRef02.json");
-    testofo.loadBrules("", "./test/buildruleRefA2.json");
+    testofo.loadBrules("", "./test/buildingrulesRefA.json");
     testofo.buildTargetFromSourceByRules();
     const builtobject: object = testofo.getTargetObject();
     const bobjJson: string = JSON.stringify(builtobject, null, 4);
-    fs.writeFile("./test/builttargetA202.json", bobjJson, (err: any) => {
+    fs.writeFile("./test/builttargetA02.json", bobjJson, (err: any) => {
         if (err) { throw err; }
     });
     return builtobject;
