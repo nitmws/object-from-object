@@ -1,7 +1,7 @@
 # object-from-object
 [![Build Status](https://travis-ci.org/nitmws/object-from-object.svg?branch=master)](https://travis-ci.org/nitmws/object-from-object)
 
-Typescript/Javascript Node.js module for building a new object from a template with values from another object.
+Typescript/Javascript Node.js module for building a new object from a template with values from another object. 
 
 ## Usage
 
