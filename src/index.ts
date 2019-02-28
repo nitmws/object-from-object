@@ -17,6 +17,30 @@ interface ISingleValue {
 }
 
 export class ObjectFromObject {
+
+    /*
+    ***** GENERIC METHODS
+     */
+
+    /**
+     * Detects the type of the JS (any-)object
+     * Returns one of the BruleValTypes.
+     * @param brvalue
+     */
+    private static getBruleValType(brvalue: object): BruleValType {
+        let rettype: BruleValType = BruleValType.Undefined;
+        if (Array.isArray(brvalue)) {
+            rettype = BruleValType.Array;
+        } else if (typeof brvalue === "string") {
+            rettype = BruleValType.String;
+        } else if (typeof brvalue === "number") {
+            rettype = BruleValType.Number;
+        } else if ((typeof brvalue === "object") && (brvalue !== null)) {
+            rettype = BruleValType.Tobject;
+        }
+        return rettype;
+    }
+
     protected _srcobj: object;
     protected _brules: object;
     protected _tgtobj: object;
@@ -375,29 +399,6 @@ export class ObjectFromObject {
             }
         }
         return retobj;
-    }
-
-    /*
-    ***** GENERIC METHODS
-     */
-
-    /**
-     * Detects the type of the JS (any-)object
-     * Returns one of the BruleValTypes.
-     * @param brvalue
-     */
-    private static getBruleValType(brvalue: object): BruleValType {
-        let rettype: BruleValType = BruleValType.Undefined;
-        if (Array.isArray(brvalue)) {
-            rettype = BruleValType.Array;
-        } else if (typeof brvalue === "string") {
-            rettype = BruleValType.String;
-        } else if (typeof brvalue === "number") {
-            rettype = BruleValType.Number;
-        } else if ((typeof brvalue === "object") && (brvalue !== null)) {
-            rettype = BruleValType.Tobject;
-        }
-        return rettype;
     }
 
 }

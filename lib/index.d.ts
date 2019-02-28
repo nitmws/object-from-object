@@ -9,6 +9,12 @@ export declare const commentPropname = "ofo$COMMENT";
 export declare const bruleValRuleSep = "$#$";
 export declare const invalidNumber = -999999;
 export declare class ObjectFromObject {
+    /**
+     * Detects the type of the JS (any-)object
+     * Returns one of the BruleValTypes.
+     * @param brvalue
+     */
+    private static getBruleValType;
     protected _srcobj: object;
     protected _brules: object;
     protected _tgtobj: object;
@@ -23,10 +29,4 @@ export declare class ObjectFromObject {
     private buildArrayofPlainValues;
     private buildArrayofTobjectValues;
     private getSourceSingleValue;
-    /**
-     * Detects the type of the JS (any-)object
-     * Returns one of the BruleValTypes.
-     * @param brvalue
-     */
-    private static getBruleValType;
 }
