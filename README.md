@@ -51,6 +51,9 @@ This module provides a framework for building a new object complying to building
 
 The building rules for the Target Object are expressed by an object.
 
+##### Used terminology
+* plain values in the Source Object: values of the JavaScript type _string_ or _number_
+
 #### The Structure
 
 The structure of the Building Rules object is a template for the Target Object. If a property of the Building Rules object can be filled with data from the Source Object this property is integrated into the Target Object, else not.
@@ -84,29 +87,25 @@ Rules for the structure of the Building Rules object:
 
 #### Rules for Retrieving Data from the Source
 
-##### Used terminology
-* plain string: a string, and nothing else
-* plain values in the Source Object: values of the JavaScript type string or number
-
 
 The value of a Building Rules property can be:
-* a plain string value, a rule for retrieving value(s) from the Source Object.
+* a string expressing a rule for retrieving value(s) from the Source Object.
 * an object including one to many Building Rule properties
-* an array using a single Building Rule property or defining an array of objects. See more details about arrays below.
+* an array using a single Building Rule or defining an array of objects with Building Rule properties. See more details about arrays below.
 
 
 The Building Rule string defines how to retrieve a value from the Source Object. Its formal structure is:
 
-`...property names in the Source Object..."$#$"...value transformation rule...`
+`...property name(s) in the Source Object..."$#$"...value transformation rule...`
 OR
 `VALxxx=...preset value...`
  
  * **Property names**: a hierarchical sequence of property names as used in JavaScript. 
    * Examples are:
-     * prop1 = a property at the hierarchical top level of the Source Object
-     * prop1.prop1a = a property in an object being the value of prop1
-     * prop5[1] = the second item in the array of values of prop5
-     * prop6[2].prop6c = a property from the third item in the array of objects being the value of prop6
+     * `prop1`: addresses a property at the hierarchical top level of the Source Object
+     * `prop1.prop1a`: addresses a property in an object being the value of prop1
+     * `prop5[1]`: addresses the second item in the array of values of prop5
+     * `prop6[2].prop6c`: addresses a property in the third item in the array of objects being the value of prop6
    * The count of this sequence is limited to 10 items. Each property name is an item and each index of an array is an item. Example: prop9.prop9a.prop9a1[2].prop9a1a makes an item count of 5.
    * Comments may be added by starting the property name with "ofo$COMMENT". In this case the property will be ignored while building the new object. As JSON rules prohibit to use the same property name multiple times you should append variable string values to this basic name on your own.
  * **The separator `$#$`**: must be used if a sequence of property names and a rule for transforming the value is defined.
@@ -115,67 +114,13 @@ OR
    * **ToNum** = converts a string value to a number - if the format of the string complies to the Javascript function parseInt
 * **Preset value rule**: if the string of the value of a property starts with VALSTR= the substring to its right becomes the string value in the Target Object. If it starts with VALNUM= the string to its right will be transformed to a numeric value becoming the numeric value in the Target Object.
 
-Example of a Building Rules object:
-```
-{
-  "tPlainPreset1": "VALSTR=this is a preset value",
-  "tPlain1": "aPlain",
-  "tPlain2": "bObj",
-  "tPlainStr1": "aPlainNum$#$ToStr",
-  "tPlainNum1": "aPlainNumericStr$#$ToNum",
-  "tPlain3": "bObj.bObj3.bObj3a",
-  "tPlain4a": "cArrPlain[1]",
-  "tPlain4b": "cArrPlain[99]",
-  "tPlain5": "dArrPlain[3]",
-  "tPlain6": "eArrObj[1].eArrObj3.eArrObj3a",
-  "tObj1": {
-    "tObj1a": "bObj.bObj1",
-    "tObj1b": "bObj.bObj2",
-    "tObj1c": {
-      "tObj1cA": "bObj.bObj3.bObj3a",
-      "tObj1cB": "bObj.bObj3.bObj3b[1]"
-    }
-  },
-  "tArr1": [ "cArrPlain"],
-  "tArr2": [ "bObj.bObj3.bObj3b" ],
-  "tArr3": [
-    {
-      "tArr3a": "bObj.bObj1",
-      "tArr3b": "bObj.bObj2"
-    }
-  ],
-  "tArr4": [
-    {
-      "tArr4a": "eArrObj[a].eArrObj1",
-      "tArr4b": "eArrObj[a].eArrObj2",
-      "tArr4c": {
-        "tArr4c1": "eArrObj[a].eArrObj3.eArrObj3a",
-        "tArr4c2": [ "eArrObj[a].eArrObj3.eArrObj3b" ]
-      }
-    }
-  ],
-  "tArr5": [
-    {
-      "tArr5a": "eArrObj[1].eArrObj3.eArrObj3c[a].eArrObj3c1",
-      "tArr5b": "eArrObj[1].eArrObj3.eArrObj3c[a].eArrObj3c2"
-    }
-  ]
-}
-```
-
-See these files in the /test folder as examples:
-
-* buildingrulesRef... .json: a Building Rules object like the one above
-* sourceRef... .json: a Source Object
-* builttarget... . json: a Target Object which was built while running tests
-
 #### Arrays
 
 Building arrays requires to follow some rules.
 
 * The Building Rule syntax for building an array is using square brackets and putting inside a Building Rule for the items inside the array.
-* A Building Rule may address a Source Object property with an array of plain values or objects: the whole array - as it is - is copied from the Source to the Target Object.
-* A Building Rule of an array may have an object with some properties inside the array. Each property of the object has its own Building Rule. In this case an array of objects with these specified properties is built.
+* A single Building Rule in the array addresses a Source Object property with an array of plain values or objects: the whole array - as it is - is copied from the Source to the Target Object.
+* Inside the array an object with some Building Rules properties is defined. In this case an array of objects with these specified properties is built.
 * The count of items in an array in the Target Object is limited by the count of available items in the Source Object:
   * the Building Rule may address a property being an array of plain values or an array of objects. In this case the same number of items are in the Target Object as in the Source Object.
   * Building Rules of the properties in an object inside an array may address properties in the Source Object. In this case the first object for the array in the Target Object is created and its count of properties used as reference. An additional object is created and added to the array of the Target Object if the count of its properties is the same as the reference count. In other words: if not all the defined properties of a target object can be filled by values from the Source Object anymore adding new objects to the array stops. 
@@ -200,13 +145,14 @@ Building arrays requires to follow some rules.
 ```
 *
   * ... in this case a Building Rule ` eArrObj3c[a].eArrObj3c1 ` can be used for a property of an object inside an array. Using this index variable results in applying the index of the to-be-built array to the array in the Source Object: the value of the target property `tArr2[0].tProp1` is copied from   ` eArrObj3c[0].eArrObj3c1 `, the value of `tArr2[1].tProp1` is copied from   ` eArrObj3c[1].eArrObj3c1 ` etc. 
-  * The index variable MUST be taken from the sequence 'a'..'z' in the hierarchical order of nested arrays of the Source Object. E.g. `eArrObj[a].eArrObj3.eArrObj3c[b].eArrObj3c1 ` indicates the properties eArrObj and eArrObj3c are an array of objects and the applied indexes `a` and `b` follow the indexing of the arrays created for the Target Object. 
+  * The index variable MUST be taken from the sequence 'a'..'z' in the hierarchical order of nested arrays of the Source Object. E.g. `eArrObj[a].eArrObj3.eArrObj3c[b].eArrObj3c1 `. 
 
-Find examples for using arrays in the Building Rules and the Source Object in these files in the /test folder:
+#### Examples 
+Find examples of Building Rules, Source Objects and built Target Objects in the /test folder:
 
-* buildingrulesRef... .json: a Building Rules object like the one above
+* buildingrulesRef... .json: a Building Rules object
 * sourceRef... .json: a Source Object
-* builttarget... . json: a Target Object which was built while running tests
+* builttarget... . json: a Target Object which was built while running tests. The file names indicate which Building Rules and what Source Object was used.
 
 ## API
 
