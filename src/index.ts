@@ -1,7 +1,5 @@
 import * as fs from "fs";
 
-export enum BruleContext { NA, inArray, inObject, inSingle }
-
 export enum BruleValType { String, Number, Tobject, Array, Undefined}
 
 export const commentPropname = "ofo$COMMENT";
@@ -10,9 +8,10 @@ export const bruleValRuleSep = "$#$";
 
 export const invalidNumber = -999999;
 
-interface IPlainValueOptArray {
+interface ISingleValue {
     asstring: string;
     asnumber: number;
+    asobject: object;
     asarray: any[];
     propfound: boolean;
 }
@@ -86,52 +85,52 @@ export class ObjectFromObject {
         this._tgtobj = this.buildSingleTobjectValue(this._brules, []);
     }
 
-    private  buildSinglePlainValue(bruleValue: string, usedArrIdxs: number[]): IPlainValueOptArray {
+    private  buildSingleValue(bruleValue: string, usedArrIdxs: number[]): ISingleValue {
         const bruleValueParts: IBruleValueParts = splitBruleValueStr(bruleValue);
-        let srcPropValueObj: IPlainValueOptArray = { asstring: "", asnumber: invalidNumber, asarray: [], propfound: true };
+        const srcPropValueObj1: ISingleValue = { asstring: "", asnumber: invalidNumber, asobject: {}, asarray: [], propfound: true };
         if (bruleValueParts.srcpropname.indexOf("VALSTR=") === 0 && bruleValueParts.srcpropname.length > 6 ) {
-            srcPropValueObj.asstring =  bruleValueParts.srcpropname.substr(7);
-            return srcPropValueObj;
+            srcPropValueObj1.asstring =  bruleValueParts.srcpropname.substr(7);
+            return srcPropValueObj1;
         }
         if (bruleValueParts.srcpropname.indexOf("VALNUM=") === 0 && bruleValueParts.srcpropname.length > 6 ) {
             const valstr: string = bruleValueParts.srcpropname.substr(7);
             const valnum: number = Number.parseInt(valstr, 10);
             if (Number.isNaN(valnum)) {
-                srcPropValueObj.propfound = false;
-                return srcPropValueObj;
+                srcPropValueObj1.propfound = false;
+                return srcPropValueObj1;
             }
-            srcPropValueObj.asnumber = valnum;
-            return srcPropValueObj;
+            srcPropValueObj1.asnumber = valnum;
+            return srcPropValueObj1;
         }
-        srcPropValueObj = this.getSourcePlainValue(bruleValueParts.srcpropname, usedArrIdxs);
+        const srcPropValueObj2: ISingleValue = this.getSourceSingleValue(bruleValueParts.srcpropname, usedArrIdxs);
         if (bruleValueParts.valueProcRule !== "") {
             // modify the value from the source by the rule
             const valueProcRule = bruleValueParts.valueProcRule.toUpperCase();
             switch (valueProcRule) {
                 case "TOSTR":
-                    if (srcPropValueObj.asstring === "") {
-                        srcPropValueObj.asstring = srcPropValueObj.asnumber.toString(10);
-                        srcPropValueObj.asnumber = invalidNumber;
+                    if (srcPropValueObj2.asstring === "") {
+                        srcPropValueObj2.asstring = srcPropValueObj2.asnumber.toString(10);
+                        srcPropValueObj2.asnumber = invalidNumber;
                     }
                     break;
                 case "TONUM":
-                    if ((srcPropValueObj.asnumber === invalidNumber) && (srcPropValueObj.asstring !== "")) {
-                        const valnumber: number = Number.parseInt(srcPropValueObj.asstring, 10);
+                    if ((srcPropValueObj2.asnumber === invalidNumber) && (srcPropValueObj2.asstring !== "")) {
+                        const valnumber: number = Number.parseInt(srcPropValueObj2.asstring, 10);
                         if (!Number.isNaN(valnumber)) {
-                            srcPropValueObj.asnumber = valnumber;
-                            srcPropValueObj.asstring = "";
+                            srcPropValueObj2.asnumber = valnumber;
+                            srcPropValueObj2.asstring = "";
                         } else {
-                            srcPropValueObj.asnumber = invalidNumber;
+                            srcPropValueObj2.asnumber = invalidNumber;
                         }
                     }
                     break;
             }
         }
-        if (srcPropValueObj.asarray.length > 0) {
-            srcPropValueObj.asarray = [];
-            srcPropValueObj.propfound = false;
+        if (srcPropValueObj2.asarray.length > 0) {
+            srcPropValueObj2.asarray = [];
+            srcPropValueObj2.propfound = false;
         }
-        return srcPropValueObj;
+        return srcPropValueObj2;
     }
     private buildSingleTobjectValue(bruleObject: any, usedArrIdxs: number[]): object {
         const builtTobj: object = {};
@@ -143,7 +142,7 @@ export class ObjectFromObject {
             const brulePropvalType: BruleValType = ObjectFromObject.getBruleValType(brulePropval);
             switch (brulePropvalType) {
                 case BruleValType.String:
-                    const builtSpValue: IPlainValueOptArray = this.buildSinglePlainValue(brulePropval, usedArrIdxs);
+                    const builtSpValue: ISingleValue = this.buildSingleValue(brulePropval, usedArrIdxs);
                     if (builtSpValue.propfound) {
                         if (builtSpValue.asstring !== "") {
                             // @ts-ignore
@@ -151,6 +150,9 @@ export class ObjectFromObject {
                         } else if (builtSpValue.asnumber !== invalidNumber) {
                             // @ts-ignore
                             builtTobj[brulePropname] = builtSpValue.asnumber;
+                        } else if (builtSpValue.asobject !== {}) {
+                            // @ts-ignore
+                            builtTobj[brulePropname] = builtSpValue.asobject;
                         }
                     }
                     break;
@@ -197,7 +199,7 @@ export class ObjectFromObject {
         if ( sqbracketstart > -1) {
             truepropname = bruleValueParts.srcpropname.substr(0, sqbracketstart);
         }
-        const srcPropValueObj = this.getSourcePlainValue(truepropname, usedArrIdxs);
+        const srcPropValueObj = this.getSourceSingleValue(truepropname, usedArrIdxs);
         if (!srcPropValueObj.propfound) {
             return builtArray;
         }
@@ -244,8 +246,8 @@ export class ObjectFromObject {
     /*
     ***** Source Object methods
      */
-    private getSourcePlainValue(bruleSourcePropName: string, usedArrIdx: number[]): IPlainValueOptArray  {
-        const retobj: IPlainValueOptArray = { asstring: "", asnumber: invalidNumber, asarray: [], propfound: true };
+    private getSourceSingleValue(bruleSourcePropName: string, usedArrIdx: number[]): ISingleValue  {
+        const retobj: ISingleValue = { asstring: "", asnumber: invalidNumber, asobject: {}, asarray: [], propfound: true };
         const propnames: string[] = bruleSourcePropName.split(".");
         const sopidxs: any[] = []; // = source object property value for an index
         propnames.forEach( (propname: string) => {
@@ -368,6 +370,8 @@ export class ObjectFromObject {
                 retobj.asstring = retval;
             } else if (typeof retval === "number") {
                 retobj.asnumber = retval;
+            } else if ((typeof retval === "object") && (retval !== null)) {
+                retobj.asobject = retval;
             }
         }
         return retobj;
@@ -396,40 +400,6 @@ export class ObjectFromObject {
         return rettype;
     }
 
-    /*
-    ***** TEST methods during development
-     */
-/*
-    public tEST01() {
-        let testUsedArrIdx = [1, 2, 3];
-        let fullpropname: string = "";
-        let testValue: object = {};
-        fullpropname = "sh1plainSingle";
-        testValue = this.getSourcePlainValue(fullpropname, testUsedArrIdx);
-        console.log("Result of getSourceValue Test 1")
-        console.log(testValue);
-        fullpropname = "nested01.nested01A2[1]";
-        testValue = this.getSourcePlainValue(fullpropname, testUsedArrIdx);
-        console.log("Result of getSourceValue Test 2")
-        console.log(testValue);
-        fullpropname = "nested01.nested01A2[a]";
-        testValue = this.getSourcePlainValue(fullpropname, testUsedArrIdx);
-        console.log("Result of getSourceValue Test 3")
-        console.log(testValue);
-        fullpropname = "nested01.nested01A4[0].nested01A4B1a";
-        testValue = this.getSourcePlainValue(fullpropname, testUsedArrIdx);
-        console.log("Result of getSourceValue Test 4")
-        console.log(testValue);
-        fullpropname = "nested01.nested01A4[b].nested01A4B1a";
-        testValue = this.getSourcePlainValue(fullpropname, testUsedArrIdx);
-        console.log("Result of getSourceValue Test 5")
-        console.log(testValue);
-        fullpropname = "sh1plainArray";
-        testValue = this.getSourcePlainValue(fullpropname, testUsedArrIdx);
-        console.log("Result of getSourceValue Test 6");
-        console.log(testValue);
-    }
-*/
 }
 
 /*

@@ -1,9 +1,3 @@
-export declare enum BruleContext {
-    NA = 0,
-    inArray = 1,
-    inObject = 2,
-    inSingle = 3
-}
 export declare enum BruleValType {
     String = 0,
     Number = 1,
@@ -23,12 +17,12 @@ export declare class ObjectFromObject {
     loadSourceObject(json: string, jsonfilepath: string): boolean;
     getTargetObject(): object;
     buildTargetFromSourceByRules(): void;
-    private buildSinglePlainValue;
+    private buildSingleValue;
     private buildSingleTobjectValue;
     private buildSingleArrayValue;
     private buildArrayofPlainValues;
     private buildArrayofTobjectValues;
-    private getSourcePlainValue;
+    private getSourceSingleValue;
     /**
      * Detects the type of the JS (any-)object
      * Returns one of the BruleValTypes.

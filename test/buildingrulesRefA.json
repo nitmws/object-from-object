@@ -1,8 +1,6 @@
 {
   "tPlainPreset1": "VALSTR=this is a preset value",
   "tPlain1": "aPlain",
-  "ofo$COMMENT_tPlain2": "tPlain2 does not deliver object - actually it should ",
-  "tPlain2": "bObj",
   "tPlainStr1": "aPlainNum$#$ToStr",
   "tPlainNum1": "aPlainNumericStr$#$ToNum",
   "tPlain3": "bObj.bObj3.bObj3a",
@@ -18,6 +16,7 @@
       "tObj1cB": "bObj.bObj3.bObj3b[1]"
     }
   },
+  "tObj2": "bObj",
   "tArr1": [ "cArrPlain"],
   "tArr2": [ "bObj.bObj3.bObj3b" ],
   "tArr3": [
