@@ -21,7 +21,11 @@ describe("Object From Object Test 01", () => {
     it("<tPlainPreset1> should return *this is a preset value*",
         () => {
             expect(builtobject.tPlainPreset1).to.equal("this is a preset value");
-        });
+        }),
+        it("<tPlain2> should return a value",
+            () => {
+                expect(builtobject.tPlain3).to.equal("Value of bObj.bObj3.bObj3a");
+            });
     it("<tPlain3> should return *Value of bObj.bObj3.bObj3a*",
         () => {
             expect(builtobject.tPlain3).to.equal("Value of bObj.bObj3.bObj3a");

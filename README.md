@@ -174,13 +174,13 @@ See these files in the /test folder as examples:
 Building arrays requires to follow some rules.
 
 * The Building Rule syntax for building an array is using square brackets and putting inside a Building Rule for the items inside the array.
-* The Building Rule may address a property with an array of plain values or objects the whole array - as it is - is copied from the Source to the Target Object.
-* The Building Rule of an array may have an object with a set of properties in the array. In this case an array of objects with these specified properties is built.
-* The count of items in an array is limited by the count of available items in the Source Object:
+* A Building Rule may address a Source Object property with an array of plain values or objects: the whole array - as it is - is copied from the Source to the Target Object.
+* A Building Rule of an array may have an object with some properties inside the array. Each property of the object has its own Building Rule. In this case an array of objects with these specified properties is built.
+* The count of items in an array in the Target Object is limited by the count of available items in the Source Object:
   * the Building Rule may address a property being an array of plain values or an array of objects. In this case the same number of items are in the Target Object as in the Source Object.
-  * Building Rules of the properties in an object inside an array may address properties in the Source Object.In this case the first object for the array in the Target Object is created and its count of properties used as reference. An additional object for the array of the Target Object is created and added if the count of its properties is the same as the reference count. In other words: if not all the defined properties of a target object can be filled by values from the Source Object adding new objects to the array stops. 
-  * ... Example: the first object has 5 properties, the 4th object only 3 properties. In this case only the first three objects, [0], [1] and [2], are copied to the Target Object. 
-  * If the addressed property is in an object inside an array an index variable can be used. E.g. the Source Object has this property   
+  * Building Rules of the properties in an object inside an array may address properties in the Source Object. In this case the first object for the array in the Target Object is created and its count of properties used as reference. An additional object is created and added to the array of the Target Object if the count of its properties is the same as the reference count. In other words: if not all the defined properties of a target object can be filled by values from the Source Object anymore adding new objects to the array stops. 
+  * ... Example: the first created object has 5 properties, the 4th object only 3 properties. In this case only the first three objects are added to the Target Object. 
+  * If the addressed property of the Source Object is in an object inside an array an index variable can be used. E.g. the Source Object has this property   
   
 ```
 "eArrObj3c": [
@@ -200,11 +200,11 @@ Building arrays requires to follow some rules.
 ```
 *
   * ... in this case a Building Rule ` eArrObj3c[a].eArrObj3c1 ` can be used for a property of an object inside an array. Using this index variable results in applying the index of the to-be-built array to the array in the Source Object: the value of the target property `tArr2[0].tProp1` is copied from   ` eArrObj3c[0].eArrObj3c1 `, the value of `tArr2[1].tProp1` is copied from   ` eArrObj3c[1].eArrObj3c1 ` etc. 
-  * The index variable MUST be taken from the sequence 'a'..'z' in the hierarchical order of nested arrays of the Source Object. E.g. `eArrObj[a].eArrObj3.eArrObj3c[b].eArrObj3c1 ` indicates the properties eArrObj and eArrObj3c are an array of objects.
+  * The index variable MUST be taken from the sequence 'a'..'z' in the hierarchical order of nested arrays of the Source Object. E.g. `eArrObj[a].eArrObj3.eArrObj3c[b].eArrObj3c1 ` indicates the properties eArrObj and eArrObj3c are an array of objects and the applied indexes `a` and `b` follow the indexing of the arrays created for the Target Object. 
 
 Find examples for using arrays in the Building Rules and the Source Object in these files in the /test folder:
 
-* buildruleRef... .json: a Building Rules object like the one above
+* buildingrulesRef... .json: a Building Rules object like the one above
 * sourceRef... .json: a Source Object
 * builttarget... . json: a Target Object which was built while running tests
 
