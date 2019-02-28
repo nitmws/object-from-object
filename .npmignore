@@ -6,6 +6,7 @@ test/
 src/
 node_modules
 .idea
+.travis.yml
 .nyc_output/
 coverage/
 
